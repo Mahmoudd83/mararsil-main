@@ -84,32 +84,7 @@ app.use(cors());
 app.use(express.static(path.join(__dirname, "uploads")));
 app.use(express.static("public"));
 
-// send notifaction
-io.on("connection", (socket) => {
-  console.log("A user connected:", socket.id);
 
-  // Join user-specific room
-  socket.on("join_user_room", (data) => {
-    const { userId } = data;
-    if (userId) {
-      socket.join(`user_${userId}`);
-      console.log(`User ${userId} joined their notification room`);
-    }
-  });
-
-  // Leave user-specific room
-  socket.on("leave_user_room", (data) => {
-    const { userId } = data;
-    if (userId) {
-      socket.leave(`user_${userId}`);
-      console.log(`User ${userId} left their notification room`);
-    }
-  });
-
-  socket.on("disconnect", () => {
-    console.log("User disconnected:", socket.id);
-  });
-});
 
 // notification middleware
 app.use((req, res, next) => {
