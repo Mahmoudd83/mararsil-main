@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>شحن المحفظة</title>
+</head>
+<body>
+  <button id="payBtn">شحن المحفظة 100 ريال</button>
+
+  <script>
+    // إنشاء عنصر script لتحميل مكتبة Moyasar
+    const moyasarScript = document.createElement('script');
+    moyasarScript.src = 'https://checkout.moyasar.com/v1/moyasar.js';
+    moyasarScript.async = true;
+
+    // عند تحميل المكتبة بنجاح
+    moyasarScript.onload = function () {
+      console.log('تم تحميل مكتبة Moyasar بنجاح');
+      
+      // إعداد معالج النقر على الزر
+      document.getElementById("payBtn").addEventListener("click", function () {
+        console.log('تم النقر على زر الدفع');
+        try {
+          MoyasarPay({
+            key: "pk_test_EHPGwD3HWQA7pKqbEPeJvWv3LT7PMPvEsdfAu5Ad", // استبدل بمفتاحك العام
+            amount: 10000, // 100 ريال = 10000 هللة
+            currency: "SAR",
+            description: "شحن المحفظة",
+            metadata: {
+              customerId: "683731a133911d202aa0904f",
+              netAmount: 10000
+            },
+            callback_url: "https://your-domain.com/payment/callback", // استبدل بعنوان URL صالح
+            methods: ["creditcard"],
+            on_completed: function (payment) {
+              console.log("تم إكمال الدفع:", payment);
+            },
+            on_error: function (error) {
+              console.error("خطأ في الدفع:", error);
+            }
+          });
+        } catch (error) {
+          console.error("خطأ أثناء تشغيل MoyasarPay:", error);
+        }
+      });
+    };
+
+    // عند فشل تحميل المكتبة
+    moyasarScript.onerror = function () {
+      console.error('فشل تحميل مكتبة Moyasar. تحقق من الاتصال أو عنوان URL.');
+    };
+
+    // إضافة السكربت إلى الصفحة
+    document.head.appendChild(moyasarScript);
+  </script>
+</body>
+</html>
